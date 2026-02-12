@@ -5,19 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Henriix Education Portal</title>
 <style>
-body { font-family: Arial; text-align: center; background: #f5f5f5; }
-.hidden { display: none; }
-input, select, button { padding: 10px; margin: 8px; width: 250px; }
-button { background: #007bff; color: white; border: none; cursor: pointer; }
-.box { background: white; padding: 15px; margin: 10px auto; width: 80%; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);}
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg,#89f7fe,#66a6ff); margin:0; padding:0; }
+  header { padding: 20px; background: rgba(255,255,255,0.9); border-bottom: 2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+  header h1 { margin:0; color:#333; }
+  .container { max-width: 800px; margin: 30px auto; background: rgba(255,255,255,0.95); padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+  input, select, button { padding: 12px; margin: 10px 0; width: 90%; border-radius: 8px; border:1px solid #ccc; font-size: 16px; }
+  button { background: #007bff; color: white; border: none; cursor: pointer; transition: 0.3s; }
+  button:hover { background: #0056b3; }
+  .hidden { display: none; }
+  .box { background: #f0f4f8; padding: 15px; margin: 10px 0; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align:left; }
+  .box a { color: #007bff; text-decoration: none; font-weight: bold; }
+  .box a:hover { text-decoration: underline; }
+  h3 { color:#333; }
 </style>
 </head>
 <body>
 
-<h2>Henriix Education Portal</h2>
+<header>
+  <h1>Henriix Education Portal</h1>
+</header>
+
+<div class="container">
 
 <!-- Login -->
 <div id="loginBox">
+  <h3>Login</h3>
   <input type="text" id="username" placeholder="Username"><br>
   <input type="password" id="password" placeholder="Password"><br>
   <button onclick="login()">Login</button>
@@ -27,9 +39,13 @@ button { background: #007bff; color: white; border: none; cursor: pointer; }
 <div id="adminPanel" class="hidden">
   <h3>Admin Panel</h3>
   <select id="adminSubject">
-    <option>Applied Physics</option>
-    <option>Mathematics</option>
-    <option>Chemistry</option>
+    <option>Industrial Management</option>
+    <option>Applied Mechanics</option>
+    <option>Technical Drawing</option>
+    <option>Electric Electronics</option>
+    <option>Information & Communication</option>
+    <option>Pakistan Studies</option>
+    <option>Chinese (TANG)</option>
   </select><br>
   <input type="text" id="pdfTitle" placeholder="PDF Title"><br>
   <input type="text" id="pdfURL" placeholder="PDF Link (GitHub/Drive URL)"><br>
@@ -43,41 +59,61 @@ button { background: #007bff; color: white; border: none; cursor: pointer; }
 <div id="studentPanel" class="hidden">
   <h3>Select Subject</h3>
   <select id="subjectSelect" onchange="loadPDFs()">
-    <option>Applied Physics</option>
-    <option>Mathematics</option>
-    <option>Chemistry</option>
+    <option>Industrial Management</option>
+    <option>Applied Mechanics</option>
+    <option>Technical Drawing</option>
+    <option>Electric Electronics</option>
+    <option>Information & Communication</option>
+    <option>Pakistan Studies</option>
+    <option>Chinese (TANG)</option>
   </select>
   <div id="pdfList"></div>
   <button onclick="logout()">Logout</button>
 </div>
 
+</div>
+
 <script>
+// Login credentials
 const adminUser = "admin";
 const adminPass = "admin123";
 const studentUser = "student";
 const studentPass = "1234";
 
-const gistURL = "https://gist.githubusercontent.com/Legend-Xaryab/f0233d4bceb46e38443563fc1ecb61d6/raw/42879827329f99c65604103c003132ce72332175/pdfs.json";
+// Gist info
+const GIST_ID = "f0233d4bceb46e38443563fc1ecb61d6"; // your Gist ID
+const GIST_TOKEN = "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"; // your PAT
+const GIST_FILE = "pdfs.json";
 
-let pdfData = {}; // will load from Gist
+let pdfData = {};
 
 // Load PDFs from Gist
 async function loadGistData() {
   try {
-    const res = await fetch(gistURL);
+    const res = await fetch(`https://gist.githubusercontent.com/Legend-Xaryab/${GIST_ID}/raw/${GIST_FILE}`);
     pdfData = await res.json();
   } catch(err) {
-    alert("Error loading PDF data from Gist!");
-    pdfData = { "Applied Physics": [], "Mathematics": [], "Chemistry": [] };
+    alert("Error loading PDFs from Gist!");
+    pdfData = {
+      "Industrial Management": [],
+      "Applied Mechanics": [],
+      "Technical Drawing": [],
+      "Electric Electronics": [],
+      "Information & Communication": [],
+      "Pakistan Studies": [],
+      "Chinese (TANG)": []
+    };
   }
 }
 
+// Hide all panels
 function hideAll() {
   document.getElementById("loginBox").classList.add("hidden");
   document.getElementById("adminPanel").classList.add("hidden");
   document.getElementById("studentPanel").classList.add("hidden");
 }
 
+// Login
 function login() {
   const u = document.getElementById("username").value;
   const p = document.getElementById("password").value;
@@ -95,38 +131,34 @@ function login() {
   }
 }
 
-function logout() {
-  location.reload();
-}
+function logout() { location.reload(); }
 
-// Add PDF (admin)
-function addPDF() {
+// Add PDF and update Gist
+async function addPDF() {
   const subject = document.getElementById("adminSubject").value;
   const title = document.getElementById("pdfTitle").value.trim();
   const url = document.getElementById("pdfURL").value.trim();
 
-  if(title === "" || url === "") {
-    alert("Enter both title and URL");
-    return;
-  }
+  if(!title || !url) { alert("Enter both title and URL"); return; }
 
+  if(!pdfData[subject]) pdfData[subject] = [];
   pdfData[subject].push({title, url});
   document.getElementById("pdfTitle").value = "";
   document.getElementById("pdfURL").value = "";
-  refreshAdminList();
 
-  alert("PDF added! Note: To make it permanent, update your Gist manually.");
+  refreshAdminList();
+  await updateGist();
 }
 
-// Show Admin PDFs
+// Refresh Admin list
 function refreshAdminList() {
   const listDiv = document.getElementById("adminPDFList");
   listDiv.innerHTML = "";
-  for(const subject in pdfData) {
-    pdfData[subject].forEach(pdf => {
+  for(const subj in pdfData) {
+    pdfData[subj].forEach(pdf => {
       const div = document.createElement("div");
       div.className = "box";
-      div.innerHTML = `<strong>${subject}:</strong> ${pdf.title} - <a href="${pdf.url}" target="_blank">Open PDF</a>`;
+      div.innerHTML = `<strong>${subj}:</strong> ${pdf.title} - <a href="${pdf.url}" target="_blank">Open PDF</a>`;
       listDiv.appendChild(div);
     });
   }
@@ -137,7 +169,6 @@ function loadPDFs() {
   const subject = document.getElementById("subjectSelect").value;
   const listDiv = document.getElementById("pdfList");
   listDiv.innerHTML = "";
-
   pdfData[subject]?.forEach(pdf => {
     const div = document.createElement("div");
     div.className = "box";
@@ -146,10 +177,26 @@ function loadPDFs() {
   });
 }
 
+// Update Gist via API
+async function updateGist() {
+  try {
+    const res = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+      method: "PATCH",
+      headers: {
+        "Authorization": `token ${GIST_TOKEN}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ files: { [GIST_FILE]: { content: JSON.stringify(pdfData, null, 2) } } })
+    });
+    if(res.ok) alert("PDF list updated permanently!");
+    else alert("Error updating Gist!");
+  } catch(err) {
+    alert("Error updating Gist!");
+  }
+}
+
 // Initialize
-window.onload = async () => {
-  await loadGistData();
-};
+window.onload = async () => { await loadGistData(); };
 </script>
 
 </body>
