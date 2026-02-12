@@ -9,7 +9,7 @@
 <body class="dark">
 
 <header>
-  <img src="images/logo.png" alt="Henriix Logo" class="logo">
+  <img src="https://img.icons8.com/color/96/000000/school-building.png" alt="Henriix Logo" class="logo">
 </header>
 
 <div class="theme-buttons">
@@ -33,10 +33,9 @@
   <button onclick="logout()">Logout</button>
 </div>
 
-<!-- Admin contact -->
 <div class="admin-contact">
   <a href="https://wa.me/923001234567" target="_blank">
-    <img src="images/whatsapp.png" alt="WhatsApp" class="whatsapp-icon">
+    <img src="https://img.icons8.com/color/48/000000/whatsapp--v1.png" alt="WhatsApp" class="whatsapp-icon">
     Contact Admin
   </a>
 </div>
@@ -49,14 +48,15 @@ const validUsers = [
   {username:"MET-2", password:"NSU456"}
 ];
 
+// Automatic logos using online URLs
 const subjects = [
-  "Industrial-Management",
-  "Applied-Mechanics",
-  "Technical-Drawing",
-  "Electric-Electronics",
-  "Information-Communication",
-  "Pakistan-Studies",
-  "Chinese-TANG"
+  {name:"Industrial-Management", icon:"https://img.icons8.com/color/96/000000/industrial-robot.png"},
+  {name:"Applied-Mechanics", icon:"https://img.icons8.com/color/96/000000/mechanical-engineering.png"},
+  {name:"Technical-Drawing", icon:"https://img.icons8.com/color/96/000000/blueprint.png"},
+  {name:"Electric-Electronics", icon:"https://img.icons8.com/color/96/000000/electronics.png"},
+  {name:"Information-Communication", icon:"https://img.icons8.com/color/96/000000/internet.png"},
+  {name:"Pakistan-Studies", icon:"https://img.icons8.com/color/96/000000/pakistan.png"},
+  {name:"Chinese-TANG", icon:"https://img.icons8.com/color/96/000000/china.png"}
 ];
 
 function setTheme(mode){
@@ -90,8 +90,8 @@ function showSubjects(){
   subjects.forEach(subj=>{
     const div = document.createElement("div");
     div.className="card";
-    div.textContent = subj.replace(/-/g,' ');
-    div.onclick = ()=> showPDFs(subj);
+    div.innerHTML = `<img src="${subj.icon}" alt="${subj.name}"><span>${subj.name.replace(/-/g,' ')}</span>`;
+    div.onclick = ()=> showPDFs(subj.name);
     container.appendChild(div);
   });
 }
@@ -107,7 +107,7 @@ async function showPDFs(subj){
     data.forEach(pdf=>{
       const div = document.createElement("div");
       div.className="pdf-item";
-      div.innerHTML=`<a href="${pdf.url}" target="_blank">${pdf.title}</a>`;
+      div.innerHTML=`<a href="${pdf.url}" target="_blank"><img src="https://img.icons8.com/color/24/000000/pdf.png" style="margin-right:8px;">${pdf.title}</a>`;
       pdfList.appendChild(div);
     });
   } catch(e){
