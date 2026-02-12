@@ -4,22 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Henriix Education Portal</title>
-<style>
-  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg,#89f7fe,#66a6ff); margin:0; padding:0; }
-  header { padding: 20px; background: rgba(255,255,255,0.9); border-bottom: 2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-  header h1 { margin:0; color:#333; }
-  .container { max-width: 800px; margin: 30px auto; background: rgba(255,255,255,0.95); padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-  input, select, button { padding: 12px; margin: 10px 0; width: 90%; border-radius: 8px; border:1px solid #ccc; font-size: 16px; }
-  button { background: #007bff; color: white; border: none; cursor: pointer; transition: 0.3s; }
-  button:hover { background: #0056b3; }
-  .hidden { display: none; }
-  .box { background: #f0f4f8; padding: 15px; margin: 10px 0; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align:left; }
-  .box a { color: #007bff; text-decoration: none; font-weight: bold; }
-  .box a:hover { text-decoration: underline; }
-  h3 { color:#333; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="light">
+
+<button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
 
 <header>
   <h1>Henriix Education Portal</h1>
@@ -27,176 +16,88 @@
 
 <div class="container">
 
-<!-- Login -->
 <div id="loginBox">
-  <h3>Login</h3>
+  <h2>Login</h2>
   <input type="text" id="username" placeholder="Username"><br>
   <input type="password" id="password" placeholder="Password"><br>
   <button onclick="login()">Login</button>
 </div>
 
-<!-- Admin Panel -->
-<div id="adminPanel" class="hidden">
-  <h3>Admin Panel</h3>
-  <select id="adminSubject">
-    <option>Industrial Management</option>
-    <option>Applied Mechanics</option>
-    <option>Technical Drawing</option>
-    <option>Electric Electronics</option>
-    <option>Information & Communication</option>
-    <option>Pakistan Studies</option>
-    <option>Chinese (TANG)</option>
-  </select><br>
-  <input type="text" id="pdfTitle" placeholder="PDF Title"><br>
-  <input type="text" id="pdfURL" placeholder="PDF Link (GitHub/Drive URL)"><br>
-  <button onclick="addPDF()">Add PDF</button>
-  <button onclick="logout()">Logout</button>
-  <h4>Current PDFs</h4>
-  <div id="adminPDFList"></div>
-</div>
-
-<!-- Student Panel -->
-<div id="studentPanel" class="hidden">
-  <h3>Select Subject</h3>
-  <select id="subjectSelect" onchange="loadPDFs()">
-    <option>Industrial Management</option>
-    <option>Applied Mechanics</option>
-    <option>Technical Drawing</option>
-    <option>Electric Electronics</option>
-    <option>Information & Communication</option>
-    <option>Pakistan Studies</option>
-    <option>Chinese (TANG)</option>
-  </select>
-  <div id="pdfList"></div>
+<div id="dashboard" class="hidden">
+  <h2>Subjects</h2>
+  <div class="subjects" id="subjectCards"></div>
+  <div class="pdf-list hidden" id="pdfList"></div>
   <button onclick="logout()">Logout</button>
 </div>
 
 </div>
 
 <script>
-// Login credentials
-const adminUser = "admin";
-const adminPass = "admin123";
-const studentUser = "student";
-const studentPass = "1234";
+const validUsers = [
+  {username:"student1", password:"1234"},
+  {username:"student2", password:"abcd"}
+];
 
-// Gist info
-const GIST_ID = "f0233d4bceb46e38443563fc1ecb61d6"; // your Gist ID
-const GIST_TOKEN = "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"; // your PAT
-const GIST_FILE = "pdfs.json";
+const subjects = [
+  "Industrial-Management",
+  "Applied-Mechanics",
+  "Technical-Drawing",
+  "Electric-Electronics",
+  "Information-Communication",
+  "Pakistan-Studies",
+  "Chinese-TANG"
+];
 
-let pdfData = {};
-
-// Load PDFs from Gist
-async function loadGistData() {
-  try {
-    const res = await fetch(`https://gist.githubusercontent.com/Legend-Xaryab/${GIST_ID}/raw/${GIST_FILE}`);
-    pdfData = await res.json();
-  } catch(err) {
-    alert("Error loading PDFs from Gist!");
-    pdfData = {
-      "Industrial Management": [],
-      "Applied Mechanics": [],
-      "Technical Drawing": [],
-      "Electric Electronics": [],
-      "Information & Communication": [],
-      "Pakistan Studies": [],
-      "Chinese (TANG)": []
-    };
-  }
+function toggleTheme(){
+  document.body.classList.toggle("dark");
+  document.body.classList.toggle("light");
 }
 
-// Hide all panels
-function hideAll() {
-  document.getElementById("loginBox").classList.add("hidden");
-  document.getElementById("adminPanel").classList.add("hidden");
-  document.getElementById("studentPanel").classList.add("hidden");
-}
-
-// Login
-function login() {
+function login(){
   const u = document.getElementById("username").value;
   const p = document.getElementById("password").value;
-
-  if(u === adminUser && p === adminPass) {
-    hideAll();
-    document.getElementById("adminPanel").classList.remove("hidden");
-    refreshAdminList();
-  } else if(u === studentUser && p === studentPass) {
-    hideAll();
-    document.getElementById("studentPanel").classList.remove("hidden");
-    loadPDFs();
+  const valid = validUsers.some(user=>user.username===u && user.password===p);
+  if(valid){
+    document.getElementById("loginBox").classList.add("hidden");
+    document.getElementById("dashboard").classList.remove("hidden");
+    showSubjects();
   } else {
-    alert("Wrong login credentials!");
+    alert("Invalid username or password!");
   }
 }
 
-function logout() { location.reload(); }
+function logout(){ location.reload(); }
 
-// Add PDF and update Gist
-async function addPDF() {
-  const subject = document.getElementById("adminSubject").value;
-  const title = document.getElementById("pdfTitle").value.trim();
-  const url = document.getElementById("pdfURL").value.trim();
-
-  if(!title || !url) { alert("Enter both title and URL"); return; }
-
-  if(!pdfData[subject]) pdfData[subject] = [];
-  pdfData[subject].push({title, url});
-  document.getElementById("pdfTitle").value = "";
-  document.getElementById("pdfURL").value = "";
-
-  refreshAdminList();
-  await updateGist();
-}
-
-// Refresh Admin list
-function refreshAdminList() {
-  const listDiv = document.getElementById("adminPDFList");
-  listDiv.innerHTML = "";
-  for(const subj in pdfData) {
-    pdfData[subj].forEach(pdf => {
-      const div = document.createElement("div");
-      div.className = "box";
-      div.innerHTML = `<strong>${subj}:</strong> ${pdf.title} - <a href="${pdf.url}" target="_blank">Open PDF</a>`;
-      listDiv.appendChild(div);
-    });
-  }
-}
-
-// Load PDFs for students
-function loadPDFs() {
-  const subject = document.getElementById("subjectSelect").value;
-  const listDiv = document.getElementById("pdfList");
-  listDiv.innerHTML = "";
-  pdfData[subject]?.forEach(pdf => {
+function showSubjects(){
+  const container = document.getElementById("subjectCards");
+  container.innerHTML="";
+  subjects.forEach(subj=>{
     const div = document.createElement("div");
-    div.className = "box";
-    div.innerHTML = `<h4>${pdf.title}</h4><a href="${pdf.url}" target="_blank">Open PDF</a>`;
-    listDiv.appendChild(div);
+    div.className="card";
+    div.textContent = subj.replace(/-/g,' ');
+    div.onclick = ()=> showPDFs(subj);
+    container.appendChild(div);
   });
 }
 
-// Update Gist via API
-async function updateGist() {
+async function showPDFs(subj){
+  const pdfList = document.getElementById("pdfList");
+  pdfList.classList.remove("hidden");
+  pdfList.innerHTML=`<h3>${subj.replace(/-/g,' ')} PDFs</h3>`;
   try {
-    const res = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-      method: "PATCH",
-      headers: {
-        "Authorization": `token ${GIST_TOKEN}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ files: { [GIST_FILE]: { content: JSON.stringify(pdfData, null, 2) } } })
+    const res = await fetch(`subjects/${subj}.json`);
+    const data = await res.json();
+    if(data.length===0){ pdfList.innerHTML+="<p>No PDFs available.</p>"; return; }
+    data.forEach(pdf=>{
+      const div = document.createElement("div");
+      div.className="pdf-item";
+      div.innerHTML=`<a href="${pdf.url}" target="_blank">${pdf.title}</a>`;
+      pdfList.appendChild(div);
     });
-    if(res.ok) alert("PDF list updated permanently!");
-    else alert("Error updating Gist!");
-  } catch(err) {
-    alert("Error updating Gist!");
+  } catch(e){
+    pdfList.innerHTML+="<p>Error loading PDFs.</p>";
   }
 }
-
-// Initialize
-window.onload = async () => { await loadGistData(); };
 </script>
 
 </body>
