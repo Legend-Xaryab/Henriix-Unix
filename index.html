@@ -6,13 +6,16 @@
 <title>Henriix Education Portal</title>
 <link rel="stylesheet" href="style.css">
 </head>
-<body class="light">
-
-<button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+<body class="dark">
 
 <header>
-  <h1>Henriix Education Portal</h1>
+  <img src="images/logo.png" alt="Henriix Logo" class="logo">
 </header>
+
+<div class="theme-buttons">
+  <button onclick="setTheme('dark')">Dark Theme</button>
+  <button onclick="setTheme('light')">Light Theme</button>
+</div>
 
 <div class="container">
 
@@ -28,6 +31,14 @@
   <div class="subjects" id="subjectCards"></div>
   <div class="pdf-list hidden" id="pdfList"></div>
   <button onclick="logout()">Logout</button>
+</div>
+
+<!-- Admin contact -->
+<div class="admin-contact">
+  <a href="https://wa.me/923001234567" target="_blank">
+    <img src="images/whatsapp.png" alt="WhatsApp" class="whatsapp-icon">
+    Contact Admin
+  </a>
 </div>
 
 </div>
@@ -48,9 +59,14 @@ const subjects = [
   "Chinese-TANG"
 ];
 
-function toggleTheme(){
-  document.body.classList.toggle("dark");
-  document.body.classList.toggle("light");
+function setTheme(mode){
+  if(mode==='dark'){
+    document.body.classList.add('dark');
+    document.body.classList.remove('light');
+  } else {
+    document.body.classList.add('light');
+    document.body.classList.remove('dark');
+  }
 }
 
 function login(){
