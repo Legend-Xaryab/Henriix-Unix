@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Henriix Education Portal</title>
+  <style>
+    body { font-family: Arial; text-align: center; background: #f5f5f5; }
+    .hidden { display: none; }
+    input, select, button { padding: 10px; margin: 8px; width: 250px; }
+    button { background: #007bff; color: white; border: none; cursor: pointer; }
+    .box { background: white; padding: 15px; margin: 10px auto; width: 80%; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);}
+    textarea { width: 250px; height: 50px; }
+  </style>
+</head>
+<body>
+
+<h2>Henriix Education Portal</h2>
+
+<!-- Login -->
+<div id="loginBox">
+  <input type="text" id="username" placeholder="Username"><br>
+  <input type="password" id="password" placeholder="Password"><br>
+  <button onclick="login()">Login</button>
+</div>
+
+<!-- Admin Panel -->
+<div id="adminPanel" class="hidden">
+  <h3>Admin Panel</h3>
+  <select id="adminSubject">
+    <option>Applied Physics</option>
+    <option>Mathematics</option>
+    <option>Chemistry</option>
+  </select><br>
+  <input type="text" id="pdfTitle" placeholder="PDF Title"><br>
+  <input type="text" id="pdfURL" placeholder="PDF Link (GitHub/Drive URL)"><br>
+  <button onclick="addPDF()">Add PDF</button>
+  <button onclick="logout()">Logout</button>
+  <h4>Current PDFs</h4>
+  <div id="adminPDFList"></div>
+</div>
+
+<!-- Student Panel -->
+<div id="studentPanel" class="hidden">
+  <h3>Select Subject</h3>
+  <select id="subjectSelect" onchange="loadPDFs()">
+    <option>Applied Physics</option>
+    <option>Mathematics</option>
+    <option>Chemistry</option>
+  </select>
+  <div id="pdfList"></div>
+  <button onclick="logout()">Logout</button>
+</div>
+
+<script>
+  // Fixed login credentials
+  const adminUser = "admin";
+  const adminPass = "admin123";
+  const studentUser = "student";
+  const studentPass = "1234";
+
+  // PDF storage (dynamic in memory, will reset on page reload)
+  const pdfData = {
+    "Applied Physics": [],
+    "Mathematics": [],
+    "Chemistry": []
+  };
+
+  function hideAll() {
+    document.getElementById("loginBox").classList.add("hidden");
+    document.getElementById("adminPanel").classList.add("hidden");
+    document.getElementById("studentPanel").classList.add("hidden");
+  }
+
+  function login() {
+    const u = document.getElementById("username").value;
+    const p = document.getElementById("password").value;
+
+    if(u === adminUser && p === adminPass) {
+      hideAll();
+      document.getElementById("adminPanel").classList.remove("hidden");
+      refreshAdminList();
+    } else if(u === studentUser && p === studentPass) {
+      hideAll();
+      document.getElementById("studentPanel").classList.remove("hidden");
+      loadPDFs();
+    } else {
+      alert("Wrong login credentials!");
+    }
+  }
+
+  function logout() {
+    location.reload();
+  }
+
+  function addPDF() {
+    const subject = document.getElementById("adminSubject").value;
+    const title = document.getElementById("pdfTitle").value.trim();
+    const url = document.getElementById("pdfURL").value.trim();
+
+    if(title === "" || url === "") {
+      alert("Please enter both title and URL");
+      return;
+    }
+
+    pdfData[subject].push({title, url});
+    document.getElementById("pdfTitle").value = "";
+    document.getElementById("pdfURL").value = "";
+
+    refreshAdminList();
+    alert("PDF added!");
+  }
+
+  function refreshAdminList() {
+    const listDiv = document.getElementById("adminPDFList");
+    listDiv.innerHTML = "";
+    for(const subject in pdfData) {
+      pdfData[subject].forEach((pdf, index) => {
+        const div = document.createElement("div");
+        div.className = "box";
+        div.innerHTML = `<strong>${subject}:</strong> ${pdf.title} - <a href="${pdf.url}" target="_blank">Open PDF</a>`;
+        listDiv.appendChild(div);
+      });
+    }
+  }
+
+  function loadPDFs() {
+    const subject = document.getElementById("subjectSelect").value;
+    const listDiv = document.getElementById("pdfList");
+    listDiv.innerHTML = "";
+
+    pdfData[subject].forEach(pdf => {
+      const div = document.createElement("div");
+      div.className = "box";
+      div.innerHTML = `<h4>${pdf.title}</h4><a href="${pdf.url}" target="_blank">Open PDF</a>`;
+      listDiv.appendChild(div);
+    });
+  }
+</script>
+
+</body>
+</html>
