@@ -12,16 +12,19 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin:0; padding:0; transition:0.3s;
-  background-color:#1a1a2e;
-  color:#eee;
+  margin:0; 
+  padding:0; 
+  transition:0.3s;
+  background-color: #1a1a2e;
+  color: #eee;
 }
 
-body.light { background-color:#f0f4f8; color:#333; }
-body.dark { background-color:#1a1a2e; color:#eee; }
+body.light { background-color: var(--bg-light); color: var(--text-light); }
+body.dark { background-color: var(--bg-dark); color: var(--text-dark); }
 
 header {
-  text-align:center; padding:20px;
+  text-align:center; 
+  padding:20px;
 }
 
 header .logo { height:80px; }
@@ -39,15 +42,27 @@ header .logo { height:80px; }
 body.light .container { background: var(--card-light); }
 
 input, button {
-  padding:14px; margin:10px 0; width:90%; border-radius:12px; border:1px solid #ccc; font-size:16px;
+  padding:14px; 
+  margin:10px 0; 
+  width:90%; 
+  border-radius:12px; 
+  border:1px solid #ccc; 
+  font-size:16px;
 }
 
 button {
   background: linear-gradient(45deg, var(--primary), var(--secondary));
-  color:#fff; border:none; cursor:pointer; font-weight:bold; transition:0.3s;
+  color:#fff; 
+  border:none; 
+  cursor:pointer; 
+  font-weight:bold; 
+  transition:0.3s;
 }
 
-button:hover { transform: translateY(-2px); box-shadow:0 5px 15px rgba(0,0,0,0.2); }
+button:hover { 
+  transform: translateY(-2px); 
+  box-shadow:0 5px 15px rgba(0,0,0,0.2); 
+}
 
 .hidden { display:none; }
 
@@ -59,55 +74,119 @@ button:hover { transform: translateY(-2px); box-shadow:0 5px 15px rgba(0,0,0,0.2
 }
 
 .card {
-  padding:25px; border-radius:20px;
-  text-align:center; cursor:pointer; transition:transform 0.3s, box-shadow 0.3s;
-  font-weight:bold; font-size:1.2rem;
-  color:#fff; background: linear-gradient(135deg,#007bff,#6610f2);
+  padding:25px; 
+  border-radius:20px;
+  text-align:center; 
+  cursor:pointer; 
+  transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+  font-weight:bold; 
+  font-size:1.2rem;
+  color:#fff; 
+  background: linear-gradient(135deg,#007bff,#6610f2);
   box-shadow:0 8px 20px rgba(0,0,0,0.2);
+  display:flex; 
+  flex-direction:column; 
+  align-items:center; 
+  justify-content:center;
 }
 
-.card:hover { transform: translateY(-5px); box-shadow:0 12px 25px rgba(0,0,0,0.4); }
+.card img { 
+  width:50px; 
+  margin-bottom:10px; 
+}
+
+.card:hover { 
+  transform: translateY(-5px); 
+  box-shadow:0 12px 25px rgba(0,0,0,0.4); 
+}
 
 .pdf-list { margin-top:30px; }
 
 .pdf-item {
-  padding:15px; margin:12px 0; border-radius:12px;
-  background: rgba(50,50,70,0.85); transition:0.3s;
+  padding:15px; 
+  margin:12px 0; 
+  border-radius:12px;
+  background: rgba(50,50,70,0.85); 
+  transition:0.3s;
+  display:flex; 
+  align-items:center; 
+  justify-content:flex-start;
 }
 
 body.light .pdf-item { background: rgba(255,255,255,0.85); }
 
-.pdf-item a { text-decoration:none; color:var(--primary); font-weight:bold; transition:0.3s; }
-.pdf-item a:hover { color:var(--accent); text-decoration:underline; }
+.pdf-item a { 
+  text-decoration:none; 
+  color:var(--primary); 
+  font-weight:bold; 
+  transition:0.3s; 
+  display:flex; 
+  align-items:center;
+}
+
+.pdf-item a img { 
+  vertical-align: middle; 
+  margin-right: 8px; 
+  width:24px; 
+  height:24px;
+}
+
+.pdf-item a:hover { 
+  color:var(--accent); 
+  text-decoration:underline; 
+  transform: scale(1.05); 
+}
 
 .admin-contact {
-  position:fixed; bottom:20px; right:20px; text-align:center;
+  position:fixed; 
+  bottom:20px; 
+  right:20px; 
+  text-align:center;
+  z-index:1000;
 }
 
 .admin-contact a {
-  display:flex; align-items:center; gap:10px;
-  padding:10px 15px; border-radius:50px;
-  background:#25D366; color:#fff; font-weight:bold;
-  text-decoration:none; box-shadow:0 5px 15px rgba(0,0,0,0.3);
+  display:flex; 
+  align-items:center; 
+  gap:10px;
+  padding:10px 15px; 
+  border-radius:50px;
+  background:#25D366; 
+  color:#fff; 
+  font-weight:bold;
+  text-decoration:none; 
+  box-shadow:0 5px 15px rgba(0,0,0,0.3); 
+  transition:0.3s;
 }
 
-.admin-contact a:hover { transform: translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,0.4); }
+.admin-contact a:hover { 
+  transform: translateY(-2px); 
+  box-shadow:0 8px 20px rgba(0,0,0,0.4); 
+}
 
-.whatsapp-icon { height:25px; }
+.whatsapp-icon { 
+  height:25px; 
+}
 
 .theme-buttons {
-  text-align:center; margin-top:10px;
+  text-align:center; 
+  margin-top:10px;
 }
 
 .theme-buttons button {
-  margin:5px; width:auto; padding:10px 20px; font-size:16px;
+  margin:5px; 
+  width:auto; 
+  padding:10px 20px; 
+  font-size:16px;
 }
 
-/* ----------------------------------
+/* ---------------------------
    MOBILE RESPONSIVE
----------------------------------- */
+--------------------------- */
 @media(max-width:600px){
   .card { font-size:1rem; padding:18px; }
   .container { padding:20px; margin:20px; }
   input, button { width:95%; font-size:14px; }
-}
+  .card img { width:40px; margin-bottom:8px; }
+  .pdf-item a img { width:20px; height:20px; }
+                                        }
