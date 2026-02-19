@@ -30,20 +30,18 @@
   <h2>Subjects</h2>
   <div class="subjects" id="subjectCards"></div>
 
-  <!-- NEW ASSIGNMENT BUTTON -->
   <div style="text-align:center; margin-top:30px;">
     <button onclick="showAssignments()">View Assignments</button>
   </div>
 
   <div class="pdf-list hidden" id="pdfList"></div>
-  <div class="pdf-list hidden" id="assignmentList"></div>
 
   <button onclick="logout()">Logout</button>
 </div>
 
 <div class="admin-contact">
   <a href="https://wa.me/923166606488" target="_blank">
-    <img src="https://img.icons8.com/color/48/000000/whatsapp--v1.png" alt="WhatsApp" class="whatsapp-icon">
+    <img src="https://img.icons8.com/color/48/000000/whatsapp--v1.png" class="whatsapp-icon">
     Contact Admin
   </a>
 </div>
@@ -66,25 +64,6 @@ const subjects = [
   {name:"Chinese-TANG", icon:"https://img.icons8.com/color/96/000000/china.png"}
 ];
 
-/* SAMPLE ASSIGNMENT DATA */
-const assignments = [
-  {
-    week: "Week 1",
-    title: "Applied Mechanics Assignment",
-    details: "Solve numerical problems from Chapter 1 (Force & Motion). Submit before Friday."
-  },
-  {
-    week: "Week 2",
-    title: "Industrial Management Assignment",
-    details: "Write short notes on Management Functions and Industrial Planning."
-  },
-  {
-    week: "Week 3",
-    title: "Technical Drawing Assignment",
-    details: "Draw projection diagrams on A4 sheet and upload scanned copy."
-  }
-];
-
 function setTheme(mode){
   if(mode==='dark'){
     document.body.classList.add('dark');
@@ -96,12 +75,12 @@ function setTheme(mode){
 }
 
 function login(){
-  const u = document.getElementById("username").value;
-  const p = document.getElementById("password").value;
+  const u = username.value;
+  const p = password.value;
   const valid = validUsers.some(user=>user.username===u && user.password===p);
   if(valid){
-    document.getElementById("loginBox").classList.add("hidden");
-    document.getElementById("dashboard").classList.remove("hidden");
+    loginBox.classList.add("hidden");
+    dashboard.classList.remove("hidden");
     showSubjects();
   } else {
     alert("Invalid username or password!");
@@ -116,7 +95,7 @@ function showSubjects(){
   subjects.forEach(subj=>{
     const div = document.createElement("div");
     div.className="card";
-    div.innerHTML = `<img src="${subj.icon}" alt="${subj.name}"><span>${subj.name.replace(/-/g,' ')}</span>`;
+    div.innerHTML = `<img src="${subj.icon}"><span>${subj.name.replace(/-/g,' ')}</span>`;
     div.onclick = ()=> showPDFs(subj.name);
     container.appendChild(div);
   });
@@ -124,15 +103,18 @@ function showSubjects(){
 
 async function showPDFs(subj){
   const pdfList = document.getElementById("pdfList");
-  const assignmentList = document.getElementById("assignmentList");
-  assignmentList.classList.add("hidden");
-
   pdfList.classList.remove("hidden");
   pdfList.innerHTML=`<h3>${subj.replace(/-/g,' ')} PDFs</h3>`;
-  try {
+
+  try{
     const res = await fetch(`subjects/${subj}.json`);
     const data = await res.json();
-    if(data.length===0){ pdfList.innerHTML+="<p>No PDFs available.</p>"; return; }
+
+    if(data.length===0){
+      pdfList.innerHTML+="<p>No PDFs available.</p>";
+      return;
+    }
+
     data.forEach(pdf=>{
       const div = document.createElement("div");
       div.className="pdf-item";
@@ -141,45 +123,54 @@ async function showPDFs(subj){
       ${pdf.title}</a>`;
       pdfList.appendChild(div);
     });
-  } catch(e){
+
+  }catch{
     pdfList.innerHTML+="<p>Error loading PDFs.</p>";
   }
 }
 
-/* NEW ASSIGNMENT FUNCTIONS */
+/* ASSIGNMENTS SYSTEM */
 
-function showAssignments(){
-  const assignmentList = document.getElementById("assignmentList");
+async function showAssignments(){
   const pdfList = document.getElementById("pdfList");
+  pdfList.classList.remove("hidden");
+  pdfList.innerHTML="<h3>Select Subject for Assignments</h3>";
 
-  pdfList.classList.add("hidden");
-  assignmentList.classList.remove("hidden");
-  assignmentList.innerHTML = "<h3>Weekly Assignments</h3>";
-
-  assignments.forEach((item, index)=>{
-    const div = document.createElement("div");
+  subjects.forEach(subj=>{
+    const div=document.createElement("div");
     div.className="pdf-item";
-    div.innerHTML = `<a href="#" onclick="showAssignmentDetails(${index})">
-    📘 ${item.week} - ${item.title}</a>`;
-    assignmentList.appendChild(div);
+    div.innerHTML=`<a href="#" onclick="loadAssignment('${subj.name}')">
+    📘 ${subj.name.replace(/-/g,' ')}</a>`;
+    pdfList.appendChild(div);
   });
 }
 
-function showAssignmentDetails(index){
-  const assignmentList = document.getElementById("assignmentList");
-  const item = assignments[index];
+async function loadAssignment(subject){
+  const pdfList=document.getElementById("pdfList");
+  pdfList.innerHTML=`<h3>${subject.replace(/-/g,' ')} Assignments</h3>`;
 
-  assignmentList.innerHTML = `
-    <h3>${item.week}</h3>
-    <div class="pdf-item">
-      <strong>${item.title}</strong><br><br>
-      ${item.details}
-    </div>
-    <br>
-    <button onclick="showAssignments()">⬅ Back to Assignments</button>
-  `;
+  try{
+    const res=await fetch(`assignments/${subject}.json`);
+    const data=await res.json();
+
+    if(data.length===0){
+      pdfList.innerHTML+="<p>No assignments available.</p>";
+      return;
+    }
+
+    data.forEach(file=>{
+      const div=document.createElement("div");
+      div.className="pdf-item";
+      div.innerHTML=`<a href="${file.url}" target="_blank">
+      <img src="https://img.icons8.com/color/24/000000/pdf.png">
+      ${file.title}</a>`;
+      pdfList.appendChild(div);
+    });
+
+  }catch{
+    pdfList.innerHTML+="<p>No assignments uploaded yet.</p>";
+  }
 }
-
 </script>
 
 </body>
