@@ -106,20 +106,138 @@ button:hover {
 .pdf-item a {
   color:#22c55e;
 }
+<style>
+/* Hacker + Premium UI Theme */
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color: #e2e8f0;
+}
+
+/* Header */
+header {
+  text-align:center;
+  padding:25px;
+}
+
+header .logo {
+  height:85px;
+  filter: drop-shadow(0 0 12px rgba(0,255,150,0.6));
+}
+
+/* Theme Buttons */
+.theme-buttons button {
+  font-family: 'Orbitron', sans-serif;
+  background: #020617;
+  border: 1px solid #22c55e;
+  color: #22c55e;
+  letter-spacing: 1px;
+}
+
+.theme-buttons button:hover {
+  background:#22c55e;
+  color:#000;
+}
+
+/* Container */
+.container {
+  background: rgba(2,6,23,0.9);
+  border: 1px solid rgba(34,197,94,0.2);
+  box-shadow: 0 0 25px rgba(34,197,94,0.15);
+}
+
+/* Headings */
+h2, h3 {
+  font-family: 'Orbitron', sans-serif;
+  color:#22c55e;
+  letter-spacing:1px;
+}
+
+/* Inputs */
+input {
+  background:#020617;
+  border:1px solid #334155;
+  color:#e2e8f0;
+}
+
+input:focus {
+  border-color:#22c55e;
+  box-shadow:0 0 8px #22c55e;
+}
+
+/* Buttons */
+button {
+  font-family:'Orbitron', sans-serif;
+  background: linear-gradient(135deg,#22c55e,#16a34a);
+  color:#000;
+  letter-spacing:1px;
+}
+
+button:hover {
+  box-shadow:0 0 15px #22c55e;
+}
+
+/* Subject Cards */
+.card {
+  background: linear-gradient(135deg,#020617,#0f172a);
+  border:1px solid rgba(34,197,94,0.3);
+  color:#22c55e;
+  font-family:'Orbitron', sans-serif;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.card:hover {
+  box-shadow:0 0 20px rgba(34,197,94,0.6);
+  transform: translateY(-6px) scale(1.03);
+}
+
+/* PDF List */
+.pdf-item {
+  background:#020617;
+  border:1px solid rgba(34,197,94,0.2);
+}
+
+.pdf-item a {
+  color:#22c55e;
+}
 
 .pdf-item a:hover {
   color:#4ade80;
 }
 
 /* WhatsApp Button */
+.admin-contact {
+  position:fixed; 
+  bottom:12px;   /* lowered */
+  right:15px;    /* adjusted */
+  text-align:center;
+  z-index:1000;
+}
+
 .admin-contact a {
+  display:flex; 
+  align-items:center; 
+  gap:8px;
+  padding:8px 12px;   /* smaller */
+  border-radius:40px;
   background: linear-gradient(135deg,#22c55e,#16a34a);
   color:#000;
   font-family:'Orbitron', sans-serif;
+  font-size:13px;     /* smaller text */
+  font-weight:500;
+  text-decoration:none; 
+  box-shadow:0 5px 12px rgba(0,0,0,0.25); 
+  transition:0.3s;
 }
 
 .admin-contact a:hover {
   box-shadow:0 0 20px #22c55e;
+}
+
+.whatsapp-icon { 
+  height:20px;   /* smaller icon */
 }
 
 /* Light Mode (clean professional) */
