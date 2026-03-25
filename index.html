@@ -4,8 +4,168 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Henrix Education Portal</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="style.css">
+
+<style>
+/* Hacker + Premium UI Theme */
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color: #e2e8f0;
+}
+
+/* Header */
+header {
+  text-align:center;
+  padding:25px;
+}
+
+header .logo {
+  height:85px;
+  filter: drop-shadow(0 0 12px rgba(0,255,150,0.6));
+}
+
+/* Theme Buttons */
+.theme-buttons button {
+  font-family: 'Orbitron', sans-serif;
+  background: #020617;
+  border: 1px solid #22c55e;
+  color: #22c55e;
+  letter-spacing: 1px;
+}
+
+.theme-buttons button:hover {
+  background:#22c55e;
+  color:#000;
+}
+
+/* Container */
+.container {
+  background: rgba(2,6,23,0.9);
+  border: 1px solid rgba(34,197,94,0.2);
+  box-shadow: 0 0 25px rgba(34,197,94,0.15);
+}
+
+/* Headings */
+h2, h3 {
+  font-family: 'Orbitron', sans-serif;
+  color:#22c55e;
+  letter-spacing:1px;
+}
+
+/* Inputs */
+input {
+  background:#020617;
+  border:1px solid #334155;
+  color:#e2e8f0;
+}
+
+input:focus {
+  border-color:#22c55e;
+  box-shadow:0 0 8px #22c55e;
+}
+
+/* Buttons */
+button {
+  font-family:'Orbitron', sans-serif;
+  background: linear-gradient(135deg,#22c55e,#16a34a);
+  color:#000;
+  letter-spacing:1px;
+}
+
+button:hover {
+  box-shadow:0 0 15px #22c55e;
+}
+
+/* Subject Cards */
+.card {
+  background: linear-gradient(135deg,#020617,#0f172a);
+  border:1px solid rgba(34,197,94,0.3);
+  color:#22c55e;
+  font-family:'Orbitron', sans-serif;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.card:hover {
+  box-shadow:0 0 20px rgba(34,197,94,0.6);
+  transform: translateY(-6px) scale(1.03);
+}
+
+/* PDF List */
+.pdf-item {
+  background:#020617;
+  border:1px solid rgba(34,197,94,0.2);
+}
+
+.pdf-item a {
+  color:#22c55e;
+}
+
+.pdf-item a:hover {
+  color:#4ade80;
+}
+
+/* WhatsApp Button */
+.admin-contact a {
+  background: linear-gradient(135deg,#22c55e,#16a34a);
+  color:#000;
+  font-family:'Orbitron', sans-serif;
+}
+
+.admin-contact a:hover {
+  box-shadow:0 0 20px #22c55e;
+}
+
+/* Light Mode (clean professional) */
+body.light {
+  background:#f1f5f9;
+  color:#0f172a;
+}
+
+body.light .container {
+  background:#ffffff;
+  border:1px solid #e2e8f0;
+  box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+body.light h2, 
+body.light h3 {
+  color:#2563eb;
+}
+
+body.light .card {
+  background: linear-gradient(135deg,#2563eb,#7c3aed);
+  color:#fff;
+  border:none;
+}
+
+body.light .pdf-item {
+  background:#f8fafc;
+}
+
+body.light .pdf-item a {
+  color:#2563eb;
+}
+
+body.light .theme-buttons button {
+  border-color:#2563eb;
+  color:#2563eb;
+}
+
+body.light .theme-buttons button:hover {
+  background:#2563eb;
+  color:#fff;
+}
+</style>
+
 </head>
+
 <body class="dark">
 
 <header>
@@ -49,6 +209,8 @@
 </div>
 
 <script>
+/* SAME JS — UNCHANGED */
+
 const validUsers = [
   {username:"MET-1", password:"NSU123"},
   {username:"MET-2", password:"NSU456"}
@@ -128,8 +290,6 @@ async function showPDFs(subj){
     pdfList.innerHTML+="<p>Error loading PDFs.</p>";
   }
 }
-
-/* ASSIGNMENTS SYSTEM */
 
 async function showAssignments(){
   const pdfList = document.getElementById("pdfList");
